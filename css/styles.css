@@ -1,0 +1,12 @@
+.decorate {
+    text-align:center;
+    border-top:1px solid red; 
+    border-bottom:1px solid red;
+}
+li {
+    list-style-type: none;
+}
+input {
+    font-size: 20px;
+    text-align: center
+}
