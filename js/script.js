@@ -50,5 +50,23 @@ async function calc(dob) {
     $('#g').html(g.join(' &nbsp '));
     $('#h').html(h);
 
+    var chart = '<table class="table">';
+    var arrchart = { 'R' : d[2], 'L M': b[0]+b[1], 'N O': b[2]+b[3], 'P Q': c[0]+c[1], 'S T': d[0]+d[1], 'U V': d[3]+d[4],
+                     'W X': e[0]+e[1], 'O Q': b[3]+c[1], 'Q': c[1], "Q R": c[1]+d[2], "R W": d[2]+e[1], "L P": b[0]+c[0],
+                     "P": c[0], "P R": c[0]+d[2], "R X": d[2]+e[1], "N Q": b[2]+c[1], "Q U": c[1]+d[3], "Q V": c[1]+d[4],
+                     "U X": d[3]+e[1], "V X": d[4]+e[1], "X C": e[1]+f[0], "M P": b[1]+c[0], "P T": c[0]+d[1], "P S": c[0]+d[0],
+                     "T W": d[1]+e[0], "S W": d[0]+e[0], "W C": e[0]+f[0], "T R": d[1]+d[2], "R U": d[2]+d[3], "O P": b[3]+c[0],
+                     "Q S": c[1]+d[0], "V W":d[4]+e[0]
+    }
+
+    var count = 1;
+    for(var k in arrchart) {
+        chart += "<tr class='"+k+" col'><td class=''>"+count+"</td><td class=''>"+k+"</td><td class=''>"+arrchart[k]+"</td></tr>";
+        count++;
+    }
+
+    chart += '</table>';
+
     $('li').attr('class', 'decorate');
+    $('#32table').html(chart);
 }
