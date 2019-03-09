@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Numerology</title>
-  <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
 
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -16,15 +16,16 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container text-center">
     <div class="row">
-      <div class="col text-center card">
+      <div class="col">
         <h1 class="mt-5">Welcome to Numerology software</h1>
         <p class="lead">Please select your birth day to generate the chart!</p>
 
-        <div class="row">
-        <div class="col-6" style="margin:0px auto; width:50%; font-size: 25px;">
-        <div class=""><p>DOB Person 1: <input type="text" id="datepicker"></p></div>
+        <section class="card">
+        <div class="row" style="padding:10px;">
+        <div class="col-6" style="font-size: 25px;">
+        <p>DOB Person 1: <input class="form-control" type="text" id="datepicker"></p>
         <ul class="list-unstyled first">
           <li class='a' id='a' ></li>
           <li class='b' id='b' ></li>
@@ -36,8 +37,8 @@
           <li class='h' id='h' ></li>
         </ul>
         </div>
-        <div class="col-6" style="margin:0px auto; width:50%; font-size: 25px;">
-        <div class=""><p>DOB Person 2: <input type="text" id="datepicker2"></p></div>
+        <div class="col-6" style="font-size: 25px;">
+        <p>DOB Person 2: <input class="form-control" type="text" id="datepicker2"></p>
             <ul class="list-unstyled second">
               <li class='a' id='a' ></li>
               <li class='b' id='b' ></li>
@@ -50,21 +51,32 @@
             </ul>
         </div>
         </div>
+      </section>
 
-        <section id="32table" style="display: none">
+        <section id="32table" class="card" style="display: none">
             <h3>32 Aspect chart</h3>
-          <div class="row table-responsive"></div>
+          <div class="table-responsive"></div>
         </section>
 
-        <section id="hchart" style="display: none">
+        <section id="hchart" class="card" style="display: none">
           <h3>Health Chart</h3>
-          <div class="row table-responsive"></div>
+          <div class="table-responsive"></div>
         </section>
 
-        <section id="dchart" style="display: none">
+        <section id="dchart" class="card" style="display: none">
             <h3>Direction Chart</h3>
-            <div class="row table-responsive"></div>
-          </section>
+            <div class="table-responsive"></div>
+        </section>
+
+        <section id="pchart" class="card" style="display: none">
+            <h3>Personal Life</h3>
+            <div class="table-responsive"></div>
+        </section>
+
+        <section id="exchart" class="card" style="display: none">
+            <h3>Missing or Excessive Codes</h3>
+            <div class="table-responsive"></div>
+        </section>
       </div>
     </div>
   </div>

@@ -53,7 +53,6 @@ function gSD(data) {
 
 async function recursive(data) {
     result = [];
-    console.log("Data "+data);
     data.forEach(k => {
         var va = k.toString().split('');
         if (k.toString().length == 2) {
@@ -158,7 +157,8 @@ async function calc(dob) {
                        'NE + SE': gSD(+b[2] + +b[3] + +c[1] + +b[3] + +c[1] + +d[2]),
                        'L + P + R': gSD(+b[0] + +c[0] + +d[2]),
                        'P + Q + R': gSD(+c[0] + +c[1] + +d[2]),
-                       'O + Q + R': gSD(+b[3] + +c[1] + +d[2])
+                       'O + Q + R': gSD(+b[3] + +c[1] + +d[2]),
+                       'L + O + R': gSD(+b[0] + +b[3] + +d[2]),
     }
 
     var dchart = '<table class="table">';
@@ -180,6 +180,55 @@ async function calc(dob) {
 
     $('#dchart').show();
     $('#dchart div').html(dchart);
+
+    var pl1 = pl2 = pl3 = [],
+        pl4 = '',
+        personal = {};
+
+    personal = {'R + W': gSD(+d[2] + +e[0]), 'W + C': gSD(+e[0] + +f[0]), 'R + X': gSD(+d[2] + +e[1]), 'X + C': gSD(+e[1] + +f[0]) };
+    pl1 = Object.values(personal);
+    pl2 = [gSD(pl1[0]+pl1[1]), gSD(pl1[1] + pl1[2]), gSD(pl1[2] + pl1[3])];
+    pl3 = [gSD(pl2[0] + pl2[1]), gSD(pl2[1] + pl2[2])];
+    pl4 = gSD(pl3[0] + pl3[1]);
+
+    var pchart = '<table class="table">';
+    pchart += "<tr class='' col'><td>R + W</td><td>W + C</td><td>R + X</td><td>X + C</td></tr>";
+    pchart += "<tr class='' col'><td>"+personal['R + W']+"</td><td>"+personal['W + C']+"</td><td>"+personal['R + X']+"</td><td>"+personal['X + C']+"</td></tr>";
+    pchart += "</table>";
+    pchart += "<ul class='list-unstyled personal'>"+
+              "<li class='a' id='a' >"+pl2.join(' &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ')+"</li>"+
+              "<li class='b' id='b' >"+pl3.join(' &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp ')+"</li>"+
+              "<li class='c' id='c' >"+pl4+"</li>"+
+              "</ul>";
+
+    $('#pchart').show();
+    $('#pchart div').html(pchart);
+
+    var excessive = [b[0], b[1], b[2], b[3], c[0], c[1], d[2], directchart['M + N'], directchart['L + O + R'], directchart['L + M + P'], directchart['N + O + Q'], directchart['P + Q + R']];
+
+    var missExcode = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0};
+    excessive.forEach(i => {
+        missExcode[i] = excessive.filter(v => v == i).length;
+    });
+
+    var exchart = '<table class="table">';
+    exchart += "<tr class='' col'><td class=''>H1</br>M + N</br>"+directchart['M + N']+"</td>"+
+                "<td style='border-left: 1px solid #dee2e6 !important;border-right: 1px solid #dee2e6;' class=''>H2</br>L + O + R</br>"+directchart['L + O + R']+"</td>"+
+                "<td class=''>H3</br>L + M + P</br>"+directchart['L + M + P']+"</td>"+
+                "<td style='border-left: 1px solid #dee2e6 !important;border-right: 1px solid #dee2e6;' class=''>H4</br>N + O + Q</br>"+directchart['N + O + Q']+"</td>"+
+                "<td class=''>H5</br>P + Q + R</br>"+directchart['P + Q + R']+"</td>"
+              "</tr></table>";
+
+    exchart += "<table class='table'><tr><th>Number</th><th>No. of Occurances</th></tr>";
+
+    for(var k in missExcode) {
+        var val = (missExcode[k] == 0) ? 'Missing' : romanize(missExcode[k]);
+        exchart += "<tr class='"+k+" col'><td class=''>"+k+"</td><td class=''>"+val+"</td></tr>";
+    }
+    exchart += '</table>';
+
+    $('#exchart').show();
+    $('#exchart div').html(exchart);
 
 }
 
