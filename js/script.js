@@ -1,20 +1,44 @@
+var a = b = c = d = f = g = h = healthcheck = [];
+
 $(function () {
-    $("#datepicker").datepicker({
+    $("#datepicker,#datepicker2").datepicker({
         changeMonth: true,
         changeYear: true
     });
-    $("#datepicker").datepicker("option", "dateFormat", "dd-mm-yy");
-    $("#datepicker").datepicker("option", "yearRange", "1900:2019");
+
+    $("#datepicker,#datepicker2").datepicker("option", "dateFormat", "dd-mm-yy");
+    $("#datepicker,#datepicker2").datepicker("option", "yearRange", "1900:2019");
     $('#datepicker').on('change', function () {
-        //var day = "24-09-1973".split('-');
         var day = $(this).val().split('-');
         var dob = [day[0], day[1], day[2].substring(0, 2), day[2].substring(2, 4)];
-        console.log(dob);
         calc(dob);
+        $('#datepicker2').val('');
+        $('.second').hide();
     });
+
+    $('#datepicker2').on('change', function () {
+        if($('#datepicker').val() === '' ) { alert("Fill first chart date of birth"); $('#datepicker2').val(''); return null; }
+
+        var day2 = $(this).val().split('-');
+        var day1 = $('#datepicker').val().split('-');
+
+        var dob1 = [day1[0], day1[1], day1[2].substring(0, 2), day1[2].substring(2, 4)];
+        var dob2 = [day2[0], day2[1], day2[2].substring(0, 2), day2[2].substring(2, 4)];
+
+        var dob3 = [gSD(+dob1[0] + +dob2[0]), gSD(+dob1[1] + +dob2[1]), gSD(+dob1[2] + +dob2[2]), gSD(+dob1[3] + +dob2[3])];
+
+        dob3[1] = (dob3[1].toString().length == 1) ? '0'+dob3[1] : dob3[1];
+        dob3[2] = (dob3[2].toString().length == 1) ? '0'+dob3[2] : dob3[2];
+        dob3[3] = (dob3[3].toString().length == 1) ? '0'+dob3[3] : dob3[3];
+        dob3[0] = (dob3[0].toString().length == 1) ? '0'+dob3[0] : dob3[0];
+
+        triangle('match',[ dob3[0], dob3[1], dob3[2], dob3[3]]);
+        $('.second').show();
+    });
+
 });
 
-function getSingleDigit(data) {
+function gSD(data) {
     if (data > 9) {
         var res = 0;
         var v = data.toString().split('');
@@ -29,9 +53,14 @@ function getSingleDigit(data) {
 
 async function recursive(data) {
     result = [];
+    console.log("Data "+data);
     data.forEach(k => {
-        var va = k.split('');
-        var val = +va[0] + +va[1];
+        var va = k.toString().split('');
+        if (k.toString().length == 2) {
+            var val = +va[0] + +va[1];
+        } else if (k.length == 3) {
+            var val = +va[0] + +va[1] + +va[2];
+        }
         if (val > 9) {
             var v = val.toString().split('');
             var res = +v[0] + +v[1];
@@ -43,9 +72,9 @@ async function recursive(data) {
     return await result;
 }
 
-async function calc(dob) {
-    var a = dob;
-    var b = c = d = f = g = h = healthcheck = [];
+async function triangle(type, dob) {
+    a = dob;
+
     b = await recursive(a);
     c = await recursive([b[0] + b[1], b[2] + b[3]]);
     d = await recursive([b[0] + c[0], b[1] + c[0], c[0] + c[1], b[2] + c[1], b[3] + c[1]]);
@@ -55,22 +84,37 @@ async function calc(dob) {
     g = await recursive([e[1] + f[0], e[0] + f[0]]);
     h = await recursive([g[0] + g[1]]);
 
+    if (type == 'single') {
+        $('.first #a').html(a.join(' &nbsp '));
+        $('.first #b').html(b.join(' &nbsp '));
+        $('.first #c').html(c.join(' &nbsp '));
+        $('.first #d').html(d.join(' &nbsp '));
+        $('.first #e').html(e.join(' &nbsp '));
+        $('.first #f').html(f);
+        $('.first #g').html(g.join(' &nbsp '));
+        $('.first #h').html(h);
+    } else {
+        $('.second #a').html(a.join(' &nbsp '));
+        $('.second #b').html(b.join(' &nbsp '));
+        $('.second #c').html(c.join(' &nbsp '));
+        $('.second #d').html(d.join(' &nbsp '));
+        $('.second #e').html(e.join(' &nbsp '));
+        $('.second #f').html(f);
+        $('.second #g').html(g.join(' &nbsp '));
+        $('.second #h').html(h);
+    }
+}
+
+async function calc(dob) {
+
+    await triangle('single', dob);
+
     healthcheck = [c[0], c[1], d[2], e[0], e[1]];
     var health = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0};
 
     healthcheck.forEach(i => {
-        console.log(i);
         health[i] = healthcheck.filter(v => v == i).length;
     });
-
-    $('#a').html(a.join(' &nbsp '));
-    $('#b').html(b.join(' &nbsp '));
-    $('#c').html(c.join(' &nbsp '));
-    $('#d').html(d.join(' &nbsp '));
-    $('#e').html(e.join(' &nbsp '));
-    $('#f').html(f);
-    $('#g').html(g.join(' &nbsp '));
-    $('#h').html(h);
 
     var chart = '<table class="table">';
     var arrchart = { 'R' : d[2], 'L M': b[0]+b[1], 'N O': b[2]+b[3], 'P Q': c[0]+c[1], 'S T': d[0]+d[1], 'U V': d[3]+d[4],
@@ -106,15 +150,15 @@ async function calc(dob) {
     $('#hchart').show();
     $('#hchart div').html(hchart);
 
-    var directchart = {'L + M + P':getSingleDigit(+b[0] + +b[1] + +c[0]),
-                       'M + N': getSingleDigit(getSingleDigit(+b[0] + +b[1]) * 2 ),
-                       'N + O + Q': getSingleDigit(+b[2] + +b[3] + +c[1]),
-                       'NW + SW': getSingleDigit(+b[0] + +b[1] + +c[0] + +b[0] + +c[0] + +d[2]),
-                       'M + N + P + Q': getSingleDigit(+b[1] + +b[2] + +c[0] + +c[1]),
-                       'NE + SE': getSingleDigit(+b[2] + +b[3] + +c[1] + +b[3] + +c[1] + +d[2]),
-                       'L + P + R': getSingleDigit(+b[0] + +c[0] + +d[2]),
-                       'P + Q + R': getSingleDigit(+c[0] + +c[1] + +d[2]),
-                       'O + Q + R': getSingleDigit(+b[3] + +c[1] + +d[2])
+    var directchart = {'L + M + P':gSD(+b[0] + +b[1] + +c[0]),
+                       'M + N': gSD(gSD(+b[1] + +b[2]) * 2 ),
+                       'N + O + Q': gSD(+b[2] + +b[3] + +c[1]),
+                       'NW + SW': gSD(+b[0] + +b[1] + +c[0] + +b[0] + +c[0] + +d[2]),
+                       'M + N + P + Q': gSD(+b[1] + +b[2] + +c[0] + +c[1]),
+                       'NE + SE': gSD(+b[2] + +b[3] + +c[1] + +b[3] + +c[1] + +d[2]),
+                       'L + P + R': gSD(+b[0] + +c[0] + +d[2]),
+                       'P + Q + R': gSD(+c[0] + +c[1] + +d[2]),
+                       'O + Q + R': gSD(+b[3] + +c[1] + +d[2])
     }
 
     var dchart = '<table class="table">';
