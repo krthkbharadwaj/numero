@@ -1,85 +1,319 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Numerology</title>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/script.js"></script>
 
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="js/script.js"></script>
+    <style>
+        .uc-profile,
+        .uc-profile2,
+        .personality,
+        .star-chart {
+            display: none;
+        }
+        section {
+            text-align: center !important;
+            margin: 20px;
+        }
+        @media print {
+            @page {
+                size: 7in 9.91in;
+                margin: 0;
+            }
+            body .container {
+                margin-bottom: 0px;
+            }
+            section {
+                text-align: center !important;
+            }
+        }
+    </style>
+    <script>
+        async function recursive(data) {
+            result = [];
+            data.forEach(k => {
+                var va = k.split('');
+                var val = +va[0] + +va[1];
+                if (val > 9) {
+                    var v = val.toString().split('');
+                    var res = +v[0] + +v[1];
+                    result.push(res + '');
+                } else {
+                    result.push(val + '');
+                }
+            });
+            return await result;
+        }
+
+        $(document).ready(async function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            $('.name').text(urlParams.get('name'));
+            var dob = urlParams.get('dob');
+            $('.dob').text(dob);
+            $('.currenttime').text(new Date().toUTCString());
+
+            //calc(dob);
+            $('#datepicker2').val('');
+            $('.second').hide();
+
+            var day = dob.split('-');
+            var day = [day[0], day[1], day[2].substring(0, 2), day[2].substring(2, 4)];
+            calc(day);
+            $('.dd').text(day[0]);
+            $('.mm').text(day[1]);
+            $('.yy1').text(day[2]);
+            $('.yy2').text(day[3]);
+
+            // console.log("day" + day);
+
+            var a = day;
+            var b = c = d = f = g = h = [];
+            b = await recursive(a);
+            c = await recursive([b[0] + b[1], b[2] + b[3]]);
+            d = await recursive([b[0] + c[0], b[1] + c[0], c[0] + c[1], b[2] + c[1], b[3] + c[1]]);
+
+            e = await recursive([c[1] + d[2], c[0] + d[2]]);
+            f = await recursive([e[0] + e[1]]);
+            g = await recursive([e[1] + f[0], e[0] + f[0]]);
+            h = await recursive([g[0] + g[1]]);
+
+            // console.log(a + " - " + b + " - " + c + " - " + d + " - " + e + " - " + f + " - " + g + " - " + h);
+            console.log(b.join(" "));
+            $('.r11').text(b[0]);
+            $('.r12').text(b[1]);
+            $('.r13').text(b[2]);
+            $('.r14').text(b[3]);
+
+            $('.r21').text(c[0]);
+            $('.r22').text(c[1]);
+
+            $('.r31').text(d[0]);
+            $('.r32').text(d[1]);
+            $('.r33').text(d[2]);
+            $('.r34').text(d[3]);
+            $('.r35').text(d[4]);
+
+            var r3l = await recursive([d[0] + d[1]]),
+                r3r = await recursive([d[3] + d[4]]);
+            $('.r3l').text(r3l);
+            $('.r3r').text(r3r);
+
+            $('.r41').text(e[0]);
+            $('.r42').text(e[1]);
+
+            $('.r51').text(f[0]);
+
+            $('.r61').text(g[0]);
+            $('.r62').text(g[1]);
+
+            $('.r71').text(h[0]);
+
+            $('.uc').text(d[2]);
+            $('.destiny').text(b.join(" "));
+            $('.strength').text(c[1]);
+            $('.weakness').text(c[0]);
+
+            var strength = await recursive([d[3] + d[4]]),
+                weakness = await recursive([d[0] + d[1]]);
+
+            $('.inbornstrength').text(d[3] + " " + d[4]);
+            $('.challenge').text(d[0] + " " + d[1]);
+
+            var intuition = await recursive([b[1] + b[2]]),
+                potential = await recursive([b[0] + b[3]]);
+            potential = await recursive([potential + d[2]]);
+
+            $('.intuition').text(intuition);
+            $('.potential').text(potential);
+
+            console.log(strength + " - " + weakness);
+
+            $('.uc-profile-' + d[2] + ', .uc-' + d[2] + '-personality, .star' + d[2]).show();
+        });
+    </script>
 </head>
+
 <body>
-
-<div class="container text-center">
-    <div class="row">
-      <div class="col">
-        <h1 class="mt-5">Welcome to Numerology software</h1>
-        <p class="lead">Please select your birth day to generate the chart!</p>
-
-        <section class="card">
-        <div class="row" style="padding:10px;">
-        <div class="col-6" style="font-size: 25px;">
-        <p>DOB Person 1: <input class="form-control" type="text" id="datepicker"></p>
-        <ul class="list-unstyled first">
-          <li class='a' id='a' ></li>
-          <li class='b' id='b' ></li>
-          <li class='c' id='c' ></li>
-          <li class='d' id='d' ></li>
-          <li class='e' id='e' ></li>
-          <li class='f' id='f' ></li>
-          <li class='g' id='g' ></li>
-          <li class='h' id='h' ></li>
-        </ul>
+    <div class="container container6">
+        <div class="academy-details academy-details-chart">
+            <section class="content">
+                <h2>Profile</h2>
+                <div class="row maincontent main-content-less-padding">
+                    <div class="chart-date-list">
+                        <div class="chart-date">
+                            <div class="row">
+                                <span class>DD</span>
+                                <span class>MM</span>
+                                <span class>YY</span>
+                                <span class>YY</span>
+                            </div>
+                            <div class="row">
+                                <span class="dd">16</span>
+                                <span class="mm">09</span>
+                                <span class="yy1">19</span>
+                                <span class="yy2">23</span>
+                            </div>
+                        </div>
+                        <div class="chart-numbers">
+                            <span class="vertical-span"></span>
+                            <span class="first-blue first-blue2 "></span>
+                            <span class="first-blue first-blue1"></span>
+                            
+                            <div class="divider divider1">
+                                <hr />
+                            </div>
+                            <div class="divider divider2">
+                                <hr />
+                            </div>
+                            <div class="row">
+                                <div class="circle">
+                                    <div class="r11">7</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r12">9</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r13">1</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r14">5</div>
+                                </div>
+                            </div>
+                            <div class="row middle-one">
+                                <div class="circle">
+                                    <div class="r21">7</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r22">6</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="circle square left">
+                                    <div class="r3l">3</div>
+                                </div>
+                                <div class="circle square right">
+                                    <div class="r3r">9</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r31">5</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r32">7</div>
+                                </div>
+                                <div class="circle active">
+                                    <div class="r33">4</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r34">7</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r35">2</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <hr />
+                            </div>
+                            <div class="row">
+                                <div class="circle">
+                                    <div class="r41">1</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r42">2</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="circle square">
+                                    <div class="r51">3</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="circle">
+                                    <div class="r61">5</div>
+                                </div>
+                                <div class="circle">
+                                    <div class="r62">4</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="circle square">
+                                    <div class="r71">9</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="chart-list">
+                            <div class="row">
+                                <div class="col-10"><span>Destiny trait</span></div>
+                                <div class="col-2 text-center"><span class="destiny"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Universal Character Trait</span></div>
+                                <div class="col-2 text-center"><span class="uc profile"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Personality EQ Strength Trait</span></div>
+                                <div class="col-2 text-center"><span class="strength"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Personality EQ Weakness Trait</span></div>
+                                <div class="col-2 text-center"><span class="weakness"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Whole Life Inborn Strength Trait</span></div>
+                                <div class="col-2 text-center"><span class="inbornstrength"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Whole Life Inborn Challenge Trait</span></div>
+                                <div class="col-2 text-center"><span class="challenge"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Intuition Trait</span></div>
+                                <div class="col-2 text-center"><span class="intuition"></span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-10"><span>Hidden potential trait</span></div>
+                                <div class="col-2 text-center"><span class="potential"></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="32table" class="card" style="display: none">
+                <h3>32 Aspect chart</h3>
+              <div class="table-responsive"></div>
+            </section>
+    
+            <section id="hchart" class="card" style="display: none">
+              <h3>Health Chart</h3>
+              <div class="table-responsive"></div>
+            </section>
+    
+            <section id="dchart" class="card" style="display: none">
+                <h3>Direction Chart</h3>
+                <div class="table-responsive"></div>
+            </section>
+    
+            <section id="pchart" class="card" style="display: none">
+                <h3>Personal Life</h3>
+                <div class="table-responsive"></div>
+            </section>
+    
+            <section id="exchart" class="card" style="display: none">
+                <h3>Missing or Excessive Codes</h3>
+                <div class="table-responsive"></div>
+            </section>
         </div>
-        <div class="col-6" style="font-size: 25px;">
-        <p>DOB Person 2: <input class="form-control" type="text" id="datepicker2"></p>
-            <ul class="list-unstyled second">
-              <li class='a' id='a' ></li>
-              <li class='b' id='b' ></li>
-              <li class='c' id='c' ></li>
-              <li class='d' id='d' ></li>
-              <li class='e' id='e' ></li>
-              <li class='f' id='f' ></li>
-              <li class='g' id='g' ></li>
-              <li class='h' id='h' ></li>
-            </ul>
-        </div>
-        </div>
-      </section>
-
-        <section id="32table" class="card" style="display: none">
-            <h3>32 Aspect chart</h3>
-          <div class="table-responsive"></div>
-        </section>
-
-        <section id="hchart" class="card" style="display: none">
-          <h3>Health Chart</h3>
-          <div class="table-responsive"></div>
-        </section>
-
-        <section id="dchart" class="card" style="display: none">
-            <h3>Direction Chart</h3>
-            <div class="table-responsive"></div>
-        </section>
-
-        <section id="pchart" class="card" style="display: none">
-            <h3>Personal Life</h3>
-            <div class="table-responsive"></div>
-        </section>
-
-        <section id="exchart" class="card" style="display: none">
-            <h3>Missing or Excessive Codes</h3>
-            <div class="table-responsive"></div>
-        </section>
-      </div>
     </div>
-  </div>
-
 </body>
+
 </html>

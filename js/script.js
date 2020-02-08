@@ -1,42 +1,42 @@
 var a = b = c = d = f = g = h = healthcheck = [];
 
-$(function () {
-    $("#datepicker,#datepicker2").datepicker({
-        changeMonth: true,
-        changeYear: true
-    });
+// $(function () {
+//     $("#datepicker,#datepicker2").datepicker({
+//         changeMonth: true,
+//         changeYear: true
+//     });
 
-    $("#datepicker,#datepicker2").datepicker("option", "dateFormat", "dd-mm-yy");
-    $("#datepicker,#datepicker2").datepicker("option", "yearRange", "1900:2019");
-    $('#datepicker').on('change', function () {
-        var day = $(this).val().split('-');
-        var dob = [day[0], day[1], day[2].substring(0, 2), day[2].substring(2, 4)];
-        calc(dob);
-        $('#datepicker2').val('');
-        $('.second').hide();
-    });
+//     $("#datepicker,#datepicker2").datepicker("option", "dateFormat", "dd-mm-yy");
+//     $("#datepicker,#datepicker2").datepicker("option", "yearRange", "1900:2019");
+//     $('#datepicker').on('change', function () {
+//         var day = $(this).val().split('-');
+//         var dob = [day[0], day[1], day[2].substring(0, 2), day[2].substring(2, 4)];
+//         calc(dob);
+//         $('#datepicker2').val('');
+//         $('.second').hide();
+//     });
 
-    $('#datepicker2').on('change', function () {
-        if($('#datepicker').val() === '' ) { alert("Fill first chart date of birth"); $('#datepicker2').val(''); return null; }
+//     $('#datepicker2').on('change', function () {
+//         if($('#datepicker').val() === '' ) { alert("Fill first chart date of birth"); $('#datepicker2').val(''); return null; }
 
-        var day2 = $(this).val().split('-');
-        var day1 = $('#datepicker').val().split('-');
+//         var day2 = $(this).val().split('-');
+//         var day1 = $('#datepicker').val().split('-');
 
-        var dob1 = [day1[0], day1[1], day1[2].substring(0, 2), day1[2].substring(2, 4)];
-        var dob2 = [day2[0], day2[1], day2[2].substring(0, 2), day2[2].substring(2, 4)];
+//         var dob1 = [day1[0], day1[1], day1[2].substring(0, 2), day1[2].substring(2, 4)];
+//         var dob2 = [day2[0], day2[1], day2[2].substring(0, 2), day2[2].substring(2, 4)];
 
-        var dob3 = [gSD(+dob1[0] + +dob2[0]), gSD(+dob1[1] + +dob2[1]), gSD(+dob1[2] + +dob2[2]), gSD(+dob1[3] + +dob2[3])];
+//         var dob3 = [gSD(+dob1[0] + +dob2[0]), gSD(+dob1[1] + +dob2[1]), gSD(+dob1[2] + +dob2[2]), gSD(+dob1[3] + +dob2[3])];
 
-        dob3[1] = (dob3[1].toString().length == 1) ? '0'+dob3[1] : dob3[1];
-        dob3[2] = (dob3[2].toString().length == 1) ? '0'+dob3[2] : dob3[2];
-        dob3[3] = (dob3[3].toString().length == 1) ? '0'+dob3[3] : dob3[3];
-        dob3[0] = (dob3[0].toString().length == 1) ? '0'+dob3[0] : dob3[0];
+//         dob3[1] = (dob3[1].toString().length == 1) ? '0'+dob3[1] : dob3[1];
+//         dob3[2] = (dob3[2].toString().length == 1) ? '0'+dob3[2] : dob3[2];
+//         dob3[3] = (dob3[3].toString().length == 1) ? '0'+dob3[3] : dob3[3];
+//         dob3[0] = (dob3[0].toString().length == 1) ? '0'+dob3[0] : dob3[0];
 
-        triangle('match',[ dob3[0], dob3[1], dob3[2], dob3[3]]);
-        $('.second').show();
-    });
+//         triangle('match',[ dob3[0], dob3[1], dob3[2], dob3[3]]);
+//         $('.second').show();
+//     });
 
-});
+// });
 
 function gSD(data) {
     if (data > 9) {
